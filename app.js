@@ -4,27 +4,42 @@ class FlashCardApp {
     this.wrapper = document.getElementById("wrapper");
     this.input = document.getElementById("input");
 
+    this.loadSetsFromLocalStorage();
+
     // Bind the event listener
-    this.addBtn.addEventListener("click", (e) => this.addNewNote(e));
+    this.addBtn.addEventListener("click", (e) => this.addNewSet(e));
   }
 
-  addNewNote(e) {
+  addNewSet(e) {
     e.preventDefault();
+    const setTitle =
+      this.input.value === "" ? "New cards set" : this.input.value;
+    this.saveSetToLocalStorage(setTitle);
+    this.input.value = "";
+    this.createSetElement(setTitle);
+  }
 
-    const cardDiv = document.createElement("div");
-    cardDiv.classList.add("card", "mx-4", "my-3");
+  createSetElement(title) {
+    const setDiv = document.createElement("div");
+    setDiv.classList.add("card", "mx-4", "my-3");
 
-    const card = document.createElement("div");
-    card.classList.add("card-body");
-    if (this.input.value === "") {
-      card.textContent = "New cards set";
-    } else {
-      card.textContent = this.input.value;
-      this.input.value = "";
-    }
+    const set = document.createElement("div");
+    set.classList.add("card-body");
+    set.textContent = title;
 
-    cardDiv.appendChild(card);
-    this.wrapper.appendChild(cardDiv);
+    setDiv.appendChild(set);
+    this.wrapper.appendChild(setDiv);
+  }
+
+  saveSetToLocalStorage(setTitle) {
+    let sets = JSON.parse(localStorage.getItem("cardSet")) || [];
+    sets.push(setTitle);
+    localStorage.setItem("cardSet", JSON.stringify(sets));
+  }
+
+  loadSetsFromLocalStorage() {
+    let sets = JSON.parse(localStorage.getItem("cardSet")) || [];
+    sets.forEach((setTitle) => this.createSetElement(setTitle));
   }
 }
 
