@@ -1,0 +1,6 @@
+.card-mod {
+  display: flex;
+  padding: 1rem;
+  border: 1px solid rgb(201, 190, 190);
+  border-radius: 6px;
+}

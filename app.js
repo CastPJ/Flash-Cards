@@ -1,6 +1,7 @@
 class FlashCardApp {
   constructor() {
     this.addBtn = document.getElementById("add-btn");
+    this.clearBtn = document.getElementById("clear-btn");
     this.wrapper = document.getElementById("wrapper");
     this.input = document.getElementById("input");
 
@@ -8,6 +9,10 @@ class FlashCardApp {
 
     // Bind the event listener
     this.addBtn.addEventListener("click", (e) => this.addNewSet(e));
+    this.clearBtn.addEventListener("click", () => {
+      localStorage.clear();
+      this.wrapper.innerHTML = "";
+    });
   }
 
   addNewSet(e) {
@@ -20,14 +25,57 @@ class FlashCardApp {
   }
 
   createSetElement(title) {
+    // Create the main card div
     const setDiv = document.createElement("div");
-    setDiv.classList.add("card", "mx-4", "my-3");
+    setDiv.classList.add("card-mod", "mx-4", "my-3");
 
-    const set = document.createElement("div");
-    set.classList.add("card-body");
-    set.textContent = title;
+    // Create the card body div
+    const cardBody = document.createElement("div");
+    cardBody.classList.add("card-body");
+    cardBody.textContent = title;
 
-    setDiv.appendChild(set);
+    // Create the dropdown button
+    const dropdownButton = document.createElement("button");
+    dropdownButton.type = "button";
+    dropdownButton.classList.add("btn", "btn-primary", "dropdown-toggle");
+    dropdownButton.setAttribute("data-bs-toggle", "dropdown");
+
+    // Create the dropdown menu
+    const dropdownMenu = document.createElement("ul");
+    dropdownMenu.classList.add("dropdown-menu");
+
+    // Create the dropdown items
+    const changeTitleItem = document.createElement("li");
+    const changeTitleLink = document.createElement("a");
+    changeTitleLink.classList.add("dropdown-item");
+    changeTitleLink.href = "#";
+    changeTitleLink.textContent = "Change title";
+    changeTitleItem.appendChild(changeTitleLink);
+
+    const changeColorItem = document.createElement("li");
+    const changeColorLink = document.createElement("a");
+    changeColorLink.classList.add("dropdown-item");
+    changeColorLink.href = "#";
+    changeColorLink.textContent = "Change color";
+    changeColorItem.appendChild(changeColorLink);
+
+    const deleteSetItem = document.createElement("li");
+    const deleteSetLink = document.createElement("a");
+    deleteSetLink.classList.add("dropdown-item");
+    deleteSetLink.href = "#";
+    deleteSetLink.textContent = "Delete set";
+    deleteSetItem.appendChild(deleteSetLink);
+
+    // Append items to the dropdown menu
+    dropdownMenu.appendChild(changeTitleItem);
+    dropdownMenu.appendChild(changeColorItem);
+    dropdownMenu.appendChild(deleteSetItem);
+
+    // Append elements to the main card div
+    setDiv.appendChild(cardBody);
+    setDiv.appendChild(dropdownButton);
+    setDiv.appendChild(dropdownMenu);
+
     this.wrapper.appendChild(setDiv);
   }
 
