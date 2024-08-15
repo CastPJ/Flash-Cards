@@ -77,11 +77,20 @@ class FlashCardApp {
     setDiv.appendChild(dropdownMenu);
 
     // Add event listeners for dropdown items
+    changeTitleLink.addEventListener("click", () => this.changeTitle(cardBody));
     deleteSetLink.addEventListener("click", () =>
       this.deleteSet(setDiv, title)
     );
 
     this.wrapper.appendChild(setDiv);
+  }
+
+  changeTitle(cardBody) {
+    const newTitle = prompt("Enter new title:", cardBody.textContent);
+    if (newTitle) {
+      this.updateSetInLocalStorage(cardBody.textContent, newTitle);
+      cardBody.textContent = newTitle;
+    }
   }
 
   deleteSet(setDiv, title) {
@@ -97,11 +106,18 @@ class FlashCardApp {
     localStorage.setItem("cardSet", JSON.stringify(sets));
   }
 
+  updateSetInLocalStorage(oldTitle, newTitle) {
+    let sets = JSON.parse(localStorage.getItem("cardSet")) || [];
+    const index = sets.indexOf(oldTitle);
+    if (index !== -1) {
+      sets[index] = newTitle;
+      localStorage.setItem("cardSet", JSON.stringify(sets));
+    }
+  }
+
   removeSetFromLocalStorage(title) {
     let sets = JSON.parse(localStorage.getItem("cardSet")) || [];
-
     sets = sets.filter((set) => set !== title);
-
     localStorage.setItem("cardSet", JSON.stringify(sets));
   }
 
