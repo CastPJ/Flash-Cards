@@ -7,7 +7,7 @@ class FlashCardApp {
 
     this.loadSetsFromLocalStorage();
 
-    // Bind the event listener
+    // Bind the event listeners
     this.addBtn.addEventListener("click", (e) => this.addNewSet(e));
     this.clearBtn.addEventListener("click", () => {
       localStorage.clear();
@@ -76,12 +76,32 @@ class FlashCardApp {
     setDiv.appendChild(dropdownButton);
     setDiv.appendChild(dropdownMenu);
 
+    // Add event listeners for dropdown items
+    deleteSetLink.addEventListener("click", () =>
+      this.deleteSet(setDiv, title)
+    );
+
     this.wrapper.appendChild(setDiv);
+  }
+
+  deleteSet(setDiv, title) {
+    if (confirm("Are you sure you want to delete this set?")) {
+      this.removeSetFromLocalStorage(title);
+      setDiv.remove();
+    }
   }
 
   saveSetToLocalStorage(setTitle) {
     let sets = JSON.parse(localStorage.getItem("cardSet")) || [];
     sets.push(setTitle);
+    localStorage.setItem("cardSet", JSON.stringify(sets));
+  }
+
+  removeSetFromLocalStorage(title) {
+    let sets = JSON.parse(localStorage.getItem("cardSet")) || [];
+
+    sets = sets.filter((set) => set !== title);
+
     localStorage.setItem("cardSet", JSON.stringify(sets));
   }
 
